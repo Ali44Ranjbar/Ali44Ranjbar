@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @Ali44Ranjbarali.ranjbar440.004@gmail.com
+- 👋 Hi, I’m ALI RANJBAR
 - 👀 I’m interested in Python development and Machine learning
 - 🌱 I’m currently learning Electrical engineering and Machine learning
 - 💞️ I’m looking to collaborate on Data Science and Python Developing
