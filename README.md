@@ -2,7 +2,7 @@
 - 👀 I’m interested in Python development and Machine learning
 - 🌱 I’m currently learning Electrical engineering and Machine learning
 - 💞️ I’m looking to collaborate on Data Science and Python Developing
-- 📫 How to reach me Get in touch with the email address(ali.ranjbar440.004@gmail.com)
+- 📫 How to reach me Get in touch with the email address(ml.genuishub4404@gmail.com)
 - 😄 Pronouns: He/him
 - ⚡ 
 
