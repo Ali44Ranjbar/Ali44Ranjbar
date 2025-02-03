@@ -1,0 +1,147 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPgShC3InZ4WWhiyP7qULst",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Ali44Ranjbar/Ali44Ranjbar/blob/main/KG%20Project1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "metadata": {
+        "id": "mnjWULePU0oY"
+      },
+      "outputs": [],
+      "source": [
+        "import spacy\n",
+        "import networkx as nx\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "nlp= spacy.load(\"en_core_web_sm\")\n",
+        "\n",
+        "KG=nx.DiGraph()\n",
+        "relation= [\n",
+        "    (\"Elon Musk\", \" Tesla\",\"CEO\"),\n",
+        "    (\"Elon Musk\", \"SpaceX\", \"Founder\"),\n",
+        "    (\"Tesla\", \"Electric Cars\", \"Produces\"),\n",
+        "    (\"SpaceX\", \"Mars\", \"Explores\"),\n",
+        "    (\"Elon Musk\", \"Neuralink\", \"Founded\"),\n",
+        "    (\"Neuralink\", \"Brain Chips\", \"Develops\")\n",
+        "]\n",
+        "\n",
+        "for src, tgt , rel in relation:\n",
+        "  KG.add_edge(src, tgt, label=rel)\n",
+        "\n",
+        "def extract_entities(question):\n",
+        "  doc=nlp(question)\n",
+        "  entities=[ent.text for ent in doc.ents]\n",
+        "  KW=[token.text for token in doc if token.is_alpha and token.pos_ in [\"NOUN\", \"PROPN\"]]\n",
+        "  if not isinstance(entities, list):\n",
+        "    print(\"Error:'entities' isn't a list!\")\n",
+        "    entities=[]\n",
+        "  if not isinstance(KW,list):\n",
+        "    print(\"Error: 'KW' isn't a list!\")\n",
+        "    KW=[]\n",
+        "  entities=[e for e in entities if isinstance(e, str)]\n",
+        "  KW=[k for k in KW if isinstance(k, str)]\n",
+        "  return set(entities + KW)\n",
+        "\n",
+        "def reason_and_answer(question):\n",
+        "  entities=extract_entities(question)\n",
+        "  print(f\"KW : {entities}\")\n",
+        "  answers=[]\n",
+        "  for entity in entities:\n",
+        "    if entity in KG:\n",
+        "      neighbors=list(KG[entity])\n",
+        "      if neighbors:\n",
+        "        for n in neighbors:\n",
+        "          relation=KG[entity][n][\"label\"]\n",
+        "          answer=f\"{entity} {relation} {n}\"\n",
+        "          answers.append(answer)\n",
+        "  if answer:\n",
+        "      return \"---\".join(answers)\n",
+        "  return \"not found\"\n",
+        "\n",
+        "\n",
+        "while True:\n",
+        "  question= input(\"Ask your question:\")\n",
+        "  if question.lower() in [\"exit\"]:\n",
+        "    print(\"Exiting.....\")\n",
+        "    break\n",
+        "  answer= reason_and_answer(question)\n",
+        "  print(f\"Answer: {answer}\\n\")\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "sS6xQrK8oX0N",
+        "outputId": "b97e83ad-8969-4c5d-f962-e99d6bbdb122"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.11/dist-packages/spacy/util.py:1740: UserWarning: [W111] Jupyter notebook detected: if using `prefer_gpu()` or `require_gpu()`, include it in the same cell right before `spacy.load()` to ensure that the model is loaded on the correct device. More information: http://spacy.io/usage/v3#jupyter-notebook-gpu\n",
+            "  warnings.warn(Warnings.W111)\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Ask your question:What is Elon Musk's role in Tesla?\n",
+            "KW : {'Elon', 'Musk', \"Elon Musk's\", 'Tesla', 'role'}\n",
+            "Answer: Tesla Produces Electric Cars\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "PsfmRXyJ0XuF"
+      },
+      "execution_count": 39,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "j0Sj0CAL4ORD"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
